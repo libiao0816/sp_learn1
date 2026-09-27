@@ -1,3 +1,54 @@
 spring:
   application:
     name: lb-learn1
+
+  # 数据源配置 (用户名/密码按你本机数据库修改)
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/lb_learn1?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:123456}
+
+# MyBatis-Plus 配置
+mybatis-plus:
+  # XML 映射文件位置 (使用注解 SQL 时可注释掉)
+  mapper-locations: classpath*:/mapper/**/*.xml
+  configuration:
+    # 数据库下划线字段自动映射为驼峰属性 (user_id -> userId)
+    map-underscore-to-camel-case: true
+    # 实际执行 SQL 时打印日志, 方便调试, 上线可关闭
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    # 关闭 banner 打印
+    banner: false
+    db-config:
+      # 主键策略: 数据库自增
+      id-type: auto
+      # 逻辑删除字段 (表里定义了则打开, 没有就注释掉)
+      # logic-delete-field: deleted
+      # logic-delete-value: 1
+      # logic-not-delete-value: 0
+
+# springdoc-openapi (Swagger UI) 配置
+springdoc:
+  api-docs:
+    enabled: true
+    # OpenAPI 描述文件地址: /v3/api-docs
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    # Swagger UI 页面地址 (knife4j 接管后主要访问 /doc.html)
+    path: /swagger-ui.html
+    # 按 Controller 的 @Tag 排序展示
+    tags-sorter: alpha
+    operations-sorter: alpha
+
+# Knife4j 配置 (Swagger 增强文档 UI, 访问地址 /doc.html)
+knife4j:
+  # 开启增强模式 (接口排序、文档导出等增强功能)
+  enable: true
+  setting:
+    # 界面语言: 中文
+    language: zh_cn
+  # 生产环境屏蔽所有文档资源入口 (部署上线时取消注释)
+  # production: true
