@@ -1,6 +1,6 @@
 package com.libiao.lblearn1.controller;
 
-import com.libiao.lblearn1.common.utils.Result;
+import com.libiao.lblearn1.common.result.Result;
 import com.libiao.lblearn1.domain.po.Category;
 import com.libiao.lblearn1.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;

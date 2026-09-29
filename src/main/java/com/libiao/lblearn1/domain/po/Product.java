@@ -1,5 +1,6 @@
 package com.libiao.lblearn1.domain.po;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
+@TableName("t_product")
 public class Product {
 
     private long id;

@@ -1,6 +1,6 @@
 package com.libiao.lblearn1.domain.dto.product;
 
-import com.libiao.lblearn1.common.utils.PageQuery;
+import com.libiao.lblearn1.domain.dto.page.PageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

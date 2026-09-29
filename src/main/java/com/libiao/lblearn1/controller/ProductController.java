@@ -1,7 +1,7 @@
 package com.libiao.lblearn1.controller;
 
-import com.libiao.lblearn1.common.utils.PageResult;
-import com.libiao.lblearn1.common.utils.Result;
+import com.libiao.lblearn1.common.result.PageResult;
+import com.libiao.lblearn1.common.result.Result;
 import com.libiao.lblearn1.domain.dto.product.ProductPageDTO;
 import com.libiao.lblearn1.domain.po.Product;
 import com.libiao.lblearn1.service.ProductService;

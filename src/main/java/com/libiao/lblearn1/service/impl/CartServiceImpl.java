@@ -2,10 +2,11 @@ package com.libiao.lblearn1.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
-import com.libiao.lblearn1.common.utils.PageResult;
+import com.libiao.lblearn1.common.result.PageResult;
 import com.libiao.lblearn1.domain.dto.cart.CartAddDTO;
 import com.libiao.lblearn1.domain.dto.cart.CartPageDTO;
 import com.libiao.lblearn1.domain.po.Cart;
+import com.libiao.lblearn1.domain.vo.cart.CartPageVO;
 import com.libiao.lblearn1.mapper.CartMapper;
 import com.libiao.lblearn1.service.CartService;
 import lombok.AllArgsConstructor;
@@ -47,9 +48,11 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
     }
 
     @Override
-    public PageResult<Cart> getCartPage(CartPageDTO cartPageDTO) {
-        Page<Cart> cartPage = lambdaQuery()
-                .page(new Page<>(cartPageDTO.getPageNum(), cartPageDTO.getPageSize()));
-        return new PageResult<>(cartPage.getTotal(), cartPage.getRecords());
+    public PageResult<CartPageVO> getCartPage(CartPageDTO cartPageDTO) {
+        Page<CartPageVO> page = cartMapper.getCartPage(
+                new Page<>(cartPageDTO.getPageNum(), cartPageDTO.getPageSize()),
+                cartPageDTO
+        );
+        return new PageResult<>(page.getTotal(), page.getRecords());
     }
 }

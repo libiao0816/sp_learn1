@@ -52,3 +52,9 @@ knife4j:
     language: zh_cn
   # 生产环境屏蔽所有文档资源入口 (部署上线时取消注释)
   # production: true
+
+lb:
+  jwt:
+    ttl: 10000
+    token-name: Authorization
+    secret: "lb-secret"

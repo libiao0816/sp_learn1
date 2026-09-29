@@ -1,4 +1,4 @@
-package com.libiao.lblearn1.common.utils;
+package com.libiao.lblearn1.domain.dto.page;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;

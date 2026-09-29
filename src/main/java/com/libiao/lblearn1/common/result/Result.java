@@ -1,4 +1,6 @@
-package com.libiao.lblearn1.common.utils;
+package com.libiao.lblearn1.common.result;
+
+import com.libiao.lblearn1.common.enums.ResultCodeEnum;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -21,8 +23,8 @@ public class Result<T> {
 
     public static <T> Result<T> Success(T data) {
         Result<T> result = new Result<>();
-        result.code = 200;
-        result.msg = "success";
+        result.code = ResultCodeEnum.SUCCESS.getCode();
+        result.msg = ResultCodeEnum.SUCCESS.getMsg();
         result.data = data;
         return result;
     }
@@ -36,8 +38,15 @@ public class Result<T> {
 
     public static <T> Result<T> Error(String msg) {
         Result<T> result = new Result<>();
-        result.code = 500;
+        result.code = ResultCodeEnum.SYSTEM_ERROR.getCode();
         result.msg = msg;
+        return result;
+    }
+
+    public static <T> Result<T> Error() {
+        Result<T> result = new Result<>();
+        result.code = ResultCodeEnum.SYSTEM_ERROR.getCode();
+        result.msg = ResultCodeEnum.SYSTEM_ERROR.getMsg();
         return result;
     }
 }
