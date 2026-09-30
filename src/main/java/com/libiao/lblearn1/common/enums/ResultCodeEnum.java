@@ -15,7 +15,6 @@ public enum ResultCodeEnum {
     AUTHENTICATION_FAILED(401, "认证失败"),
     FORBIDDEN(403, "权限不足");
 
-
     private final Integer code;
     private final String msg;
 }

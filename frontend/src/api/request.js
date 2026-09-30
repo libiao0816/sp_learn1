@@ -27,7 +27,7 @@ request.interceptors.response.use(
     // 后端统一返回 { code, msg, data }，code 为 200 表示成功
     if (res && res.code !== undefined) {
       if (res.code === 200) {
-        return res.data
+        return res
       }
       ElMessage.error(res.msg || '请求失败')
       return Promise.reject(new Error(res.msg || '请求失败'))

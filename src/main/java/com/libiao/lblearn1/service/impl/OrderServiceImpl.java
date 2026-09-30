@@ -38,10 +38,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                         Order::getCreateTime)
                 .page(new Page<>(orderPageDTO.getPageNum(), orderPageDTO.getPageSize()));
 
-        System.out.println("orderPage: " + orderPage);
-        System.out.println("orderPage.getRecords(): " + orderPage.getRecords());
         List<Long> orderIds = orderPage.getRecords().stream().map(Order::getId).collect(Collectors.toList());
-        System.out.println("orderIds: " + orderIds);
 
         List<OrderItem> orderItemsByOrderIds = orderItemService.getOrderItemsByOrderIds(orderIds);
         Map<Long, List<OrderItem>> orderItemMap = orderItemsByOrderIds.stream()

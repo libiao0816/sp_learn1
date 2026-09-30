@@ -1,11 +1,11 @@
 import request from './request'
 
-// 登录（后端目前是空实现，仅返回成功）
-export function login() {
-  return request.post('/user/login')
+// 登录：data 为 { username, password }，axios 会以 JSON 请求体发送
+export function login(data) {
+  return request.post('/user/login', data)
 }
 
-// 注册（后端目前是空实现，仅返回成功）
-export function register() {
-  return request.post('/user/register')
+// 注册：data 为 { username, password }，axios 会以 JSON 请求体发送
+export function register(data) {
+  return request.post('/user/register', data)
 }

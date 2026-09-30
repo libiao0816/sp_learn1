@@ -71,6 +71,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- 仅引入 BCrypt 密码加密模块，不引入 security starter（避免启用默认登录拦截） -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+        </dependency>
         <!-- JWT 三件套：api 编译期用，impl/jackson 运行期用（官方推荐结构） -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -132,6 +137,11 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                    <compilerArgs>--enable-preview</compilerArgs>
+                </configuration>
             </plugin>
         </plugins>
     </build>

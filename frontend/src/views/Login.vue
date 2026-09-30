@@ -52,10 +52,10 @@ async function handleLogin() {
   }
   loading.value = true
   try {
-    await login()
+    const res = await login({ username: form.username, password: form.password })
     // 后端 LoginInterceptor 只校验 Authorization 头是否非空，
     // 后续接入真实 JWT 后，这里换成接口返回的 token 即可
-    localStorage.setItem('token', `token-${form.username}`)
+    localStorage.setItem('token', res.data)
     ElMessage.success('登录成功')
     router.push('/product')
   } finally {
@@ -70,8 +70,8 @@ async function handleRegister() {
   }
   loading.value = true
   try {
-    await register()
-    ElMessage.success('注册接口调用成功（后端暂为空实现）')
+    await register({ username: form.username, password: form.password })
+    ElMessage.success('注册成功，请登录')
   } finally {
     loading.value = false
   }
