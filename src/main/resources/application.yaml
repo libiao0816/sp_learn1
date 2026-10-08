@@ -9,6 +9,26 @@ spring:
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:123456}
 
+  # Redis 配置 (默认连接本机 localhost:6379, 无密码)
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:123456}
+      database: ${REDIS_DATABASE:1}
+      # 连接超时时间 (毫秒)
+      timeout: 3000
+      lettuce:
+        pool:
+          # 最大空闲连接数 (默认8)
+          max-idle: 8
+          # 最小空闲连接数 (默认0)
+          min-idle: 3
+          # 最大连接数 (默认8, 生产环境可调大)
+          max-active: 20
+          # 最大等待时间 (毫秒, -1表示无限等待)
+          max-wait: 60000
+
 # MyBatis-Plus 配置
 mybatis-plus:
   # XML 映射文件位置 (使用注解 SQL 时可注释掉)

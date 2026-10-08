@@ -2,10 +2,10 @@
   <div class="auth-wrap">
     <el-card class="auth-card">
       <template #header>
-        <div class="card-title">登录</div>
+        <div class="card-title">注册</div>
       </template>
 
-      <el-form :model="form" label-width="70px" @submit.prevent>
+      <el-form :model="form" label-width="90px" @submit.prevent>
         <el-form-item label="用户名">
           <el-input v-model="form.username" placeholder="请输入用户名" />
         </el-form-item>
@@ -15,18 +15,26 @@
             type="password"
             placeholder="请输入密码"
             show-password
-            @keyup.enter="handleLogin"
+          />
+        </el-form-item>
+        <el-form-item label="确认密码">
+          <el-input
+            v-model="form.confirmPassword"
+            type="password"
+            placeholder="请再次输入密码"
+            show-password
+            @keyup.enter="handleRegister"
           />
         </el-form-item>
       </el-form>
 
       <div class="btn-group">
-        <el-button type="primary" :loading="loading" @click="handleLogin">登录</el-button>
+        <el-button type="primary" :loading="loading" @click="handleRegister">注册</el-button>
       </div>
 
       <div class="tip">
-        还没有账号？
-        <el-link type="primary" :underline="false" @click="router.push('/register')">去注册</el-link>
+        已有账号？
+        <el-link type="primary" :underline="false" @click="router.push('/login')">去登录</el-link>
       </div>
     </el-card>
   </div>
@@ -36,28 +44,32 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { login } from '../api/user'
+import { register } from '../api/user'
 
 const router = useRouter()
 const loading = ref(false)
 
 const form = reactive({
   username: '',
-  password: ''
+  password: '',
+  confirmPassword: ''
 })
 
-// 登录：调用后端接口，成功后写入 token
-async function handleLogin() {
+// 注册：调用后端接口，成功后跳转登录页
+async function handleRegister() {
   if (!form.username || !form.password) {
     ElMessage.warning('请输入用户名和密码')
     return
   }
+  if (form.password !== form.confirmPassword) {
+    ElMessage.warning('两次输入的密码不一致')
+    return
+  }
   loading.value = true
   try {
-    const res = await login({ username: form.username, password: form.password })
-    localStorage.setItem('token', res.data)
-    ElMessage.success('登录成功')
-    router.push('/product')
+    await register({ username: form.username, password: form.password })
+    ElMessage.success('注册成功，请登录')
+    router.push('/login')
   } catch (e) {
     // 错误提示已在响应拦截器统一处理
   } finally {

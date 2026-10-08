@@ -59,6 +59,16 @@
             <artifactId>mybatis-plus-jsqlparser</artifactId>
             <version>3.5.17</version>
         </dependency>
+        <!-- Spring Data Redis (Spring Boot 3.x 默认使用 Lettuce 客户端) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!-- Lettuce 连接池依赖 (application.yaml 中配置了 lettuce.pool 时必须引入) -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
         <!-- Lombok (可选) -->
         <dependency>
             <groupId>org.projectlombok</groupId>
