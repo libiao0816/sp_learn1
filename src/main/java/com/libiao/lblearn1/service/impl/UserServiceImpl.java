@@ -3,14 +3,17 @@ package com.libiao.lblearn1.service.impl;
 import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
 import com.libiao.lblearn1.common.properties.JwtProperties;
 import com.libiao.lblearn1.common.utils.JwtUtil;
+import com.libiao.lblearn1.common.utils.TokenBlackList;
 import com.libiao.lblearn1.domain.dto.user.UserLoginDTO;
 import com.libiao.lblearn1.domain.dto.user.UserRegisterDTO;
 import com.libiao.lblearn1.domain.po.User;
 import com.libiao.lblearn1.mapper.UserMapper;
+import com.libiao.lblearn1.common.context.UserContext;
 import com.libiao.lblearn1.common.enums.ResultCodeEnum;
 import com.libiao.lblearn1.common.enums.UserErrorCodeEnum;
 import com.libiao.lblearn1.common.exception.BusinessException;
 import com.libiao.lblearn1.service.UserService;
+import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;
 
 import java.util.Objects;
@@ -28,6 +31,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final PasswordEncoder passwordEncoder;
 
     private final JwtProperties jwtProperties;
+
+    private final TokenBlackList tokenBlackList;
 
     @Override
     public String login(UserLoginDTO userLoginDTO) {
@@ -67,5 +72,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(ResultCodeEnum.SYSTEM_ERROR);
         }
         return insert;
+    }
+
+    @Override
+    public Boolean logout(String token) {
+        Claims claims = JwtUtil.parseToken(token, jwtProperties.getSecret());
+        tokenBlackList.addBlackList(claims.getId(), claims.getExpiration().getTime());
+        return true;
+    }
+
+    @Override
+    public User getUserDetail() {
+        User contextUser = UserContext.getUser();
+        return lambdaQuery()
+                .eq(User::getId, contextUser.getId())
+                .one();
     }
 }

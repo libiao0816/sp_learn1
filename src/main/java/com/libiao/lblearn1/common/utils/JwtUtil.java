@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.time.Duration;
+import java.util.UUID;
 
 import javax.crypto.SecretKey;
 
@@ -34,6 +35,7 @@ public class JwtUtil {
 
     public static String createToken(User user,String secret,Long ttl) {
         return Jwts.builder().subject(user.getId().toString())
+                .id(UUID.randomUUID().toString())
                 .claim("username", user.getUsername())
                 .issuedAt(new Date()) // 签发时间
                 .expiration(new Date(System.currentTimeMillis() + ttl)) // 过期时间

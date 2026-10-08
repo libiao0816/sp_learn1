@@ -7,6 +7,7 @@ import com.libiao.lblearn1.common.context.UserContext;
 import com.libiao.lblearn1.common.properties.AuthProperties;
 import com.libiao.lblearn1.common.result.Result;
 import com.libiao.lblearn1.common.utils.JwtUtil;
+import com.libiao.lblearn1.common.utils.TokenBlackList;
 import com.libiao.lblearn1.domain.po.User;
 
 import io.jsonwebtoken.Claims;
@@ -29,6 +30,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     private final JwtProperties jwtProperties;
 
+    private final TokenBlackList  tokenBlackList;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
@@ -36,7 +39,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         String token = request.getHeader(jwtProperties.getTokenName());
 
         if (Objects.isNull(token) || token.isEmpty()) {
-            throw new BusinessException(ResultCodeEnum.AUTHENTICATION_FAILED.getCode(), "未携带token"); // ★
+            throw new BusinessException(ResultCodeEnum.AUTHENTICATION_FAILED.getCode(), "请先进行登陆"); // ★
         }
 
         Claims claims = null;
@@ -47,11 +50,13 @@ public class LoginInterceptor implements HandlerInterceptor {
         } catch (Exception e) {
             throw new BusinessException(ResultCodeEnum.AUTHENTICATION_FAILED.getCode(),
                     ResultCodeEnum.AUTHENTICATION_FAILED.getMsg()); // ★
-        } finally {
-            if (claims != null) {
-                UserContext.setUser(User.builder().id(Long.parseLong(claims.getSubject()))
-                        .username(claims.get("username").toString()).build());
+        }
+        if (claims != null) {
+            if(tokenBlackList.isBlackList(claims.getId())){
+                throw new BusinessException(ResultCodeEnum.AUTHENTICATION_FAILED.getCode(), "token 已失效，请重新登录"); // ★
             }
+            UserContext.setUser(User.builder().id(Long.parseLong(claims.getSubject()))
+                    .username(claims.get("username").toString()).build());
         }
 
         return true;

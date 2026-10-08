@@ -7,7 +7,11 @@ import com.libiao.lblearn1.domain.po.User;
 
 public interface UserService extends IService<User> {
 
+    User getUserDetail();
+
     String login(UserLoginDTO userLoginDTO);
 
     Integer register(UserRegisterDTO userRegisterDTO);
+
+    Boolean logout(String token);
 }

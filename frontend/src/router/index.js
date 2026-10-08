@@ -26,6 +26,12 @@ const routes = [
     component: () => import('../views/OrderList.vue'),
     meta: { title: '订单列表' }
   },
+  {
+    path: '/user',
+    name: 'UserProfile',
+    component: () => import('../views/UserProfile.vue'),
+    meta: { title: '个人中心' }
+  },
 ]
 
 const router = createRouter({
