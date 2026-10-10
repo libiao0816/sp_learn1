@@ -7,15 +7,18 @@ import com.libiao.lblearn1.common.utils.TokenBlackList;
 import com.libiao.lblearn1.domain.dto.user.UserLoginDTO;
 import com.libiao.lblearn1.domain.dto.user.UserRegisterDTO;
 import com.libiao.lblearn1.domain.po.User;
+import com.libiao.lblearn1.domain.po.UserRole;
 import com.libiao.lblearn1.mapper.UserMapper;
 import com.libiao.lblearn1.common.context.UserContext;
 import com.libiao.lblearn1.common.enums.ResultCodeEnum;
 import com.libiao.lblearn1.common.enums.UserErrorCodeEnum;
 import com.libiao.lblearn1.common.exception.BusinessException;
+import com.libiao.lblearn1.service.UserRoleService;
 import com.libiao.lblearn1.service.UserService;
 import io.jsonwebtoken.Claims;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,6 +37,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     private final TokenBlackList tokenBlackList;
 
+    private final UserRoleService userRoleService;
+
     @Override
     public String login(UserLoginDTO userLoginDTO) {
         // 只按用户名查询：BCrypt 每次 encode 的盐都不同，绝不能拿 encode 结果当查询条件
@@ -48,7 +53,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(UserErrorCodeEnum.PASSWORD_ERROR.getCode(),
                     UserErrorCodeEnum.PASSWORD_ERROR.getMsg());
         }
-        return JwtUtil.createToken(dbUser, jwtProperties.getSecret(), jwtProperties.getTtl());
+        List<String> userRoles = userRoleService.findRoleByUserId(dbUser.getId());
+        return JwtUtil.createToken(dbUser, jwtProperties.getSecret(), jwtProperties.getTtl(), userRoles);
     }
 
     @Transactional(rollbackFor = Exception.class)

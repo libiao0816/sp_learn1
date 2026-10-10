@@ -1,8 +1,11 @@
 package com.libiao.lblearn1.interceptor;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import com.libiao.lblearn1.annotation.RequireRole;
 import com.libiao.lblearn1.common.context.UserContext;
 import com.libiao.lblearn1.common.properties.AuthProperties;
 import com.libiao.lblearn1.common.result.Result;
@@ -14,6 +17,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.libiao.lblearn1.common.enums.ResultCodeEnum;
@@ -55,9 +59,23 @@ public class LoginInterceptor implements HandlerInterceptor {
             if(tokenBlackList.isBlackList(claims.getId())){
                 throw new BusinessException(ResultCodeEnum.AUTHENTICATION_FAILED.getCode(), "token 已失效，请重新登录"); // ★
             }
+
+            if(handler instanceof HandlerMethod hm){
+                RequireRole anno = hm.getMethodAnnotation(RequireRole.class);
+                if(Objects.nonNull(anno)){
+                    List<?> roles = claims.get("roles", List.class);
+                    boolean pass = Arrays.stream(anno.value()).anyMatch(roles::contains);
+                    if(!pass){
+                        throw new BusinessException(ResultCodeEnum.FORBIDDEN.getCode(), ResultCodeEnum.FORBIDDEN.getMsg()); // ★
+                    }
+                }
+            }
+
             UserContext.setUser(User.builder().id(Long.parseLong(claims.getSubject()))
                     .username(claims.get("username").toString()).build());
         }
+
+
 
         return true;
     }

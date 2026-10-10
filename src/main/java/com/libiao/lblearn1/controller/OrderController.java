@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -19,6 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 
     private final OrderService orderService;
+
+    @PostMapping("/deleteById")
+    public Result<Boolean> deleteById(@RequestParam Long id) {
+        return Result.Success(orderService.deleteById(id));
+    }
 
     @PostMapping("/page")
     public Result<PageResult<OrderPageVO>> page(@RequestBody OrderPageDTO orderPageDTO) {

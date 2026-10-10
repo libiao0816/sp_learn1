@@ -30,6 +30,11 @@
         <java.version>21</java.version>
     </properties>
     <dependencies>
+        <!-- Spring Boot Security 模块 -->
+        <!-- <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency> -->
         <!-- Spring Boot Web 模块 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

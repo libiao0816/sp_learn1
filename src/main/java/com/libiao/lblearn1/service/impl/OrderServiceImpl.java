@@ -2,6 +2,8 @@ package com.libiao.lblearn1.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
+import com.libiao.lblearn1.common.enums.OrderCodeEnum;
+import com.libiao.lblearn1.common.exception.BusinessException;
 import com.libiao.lblearn1.common.result.PageResult;
 import com.libiao.lblearn1.domain.dto.order.OrderPageDTO;
 import com.libiao.lblearn1.domain.po.Order;
@@ -25,6 +27,15 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements OrderService {
 
     private final OrderItemService orderItemService;
+
+    @Override
+    public Boolean deleteById(Long id) {
+        boolean result = removeById(id);
+        if(!result){
+            throw new BusinessException(OrderCodeEnum.ORDER_DELETE_FAILED.getCode(), OrderCodeEnum.ORDER_DELETE_FAILED.getMsg());
+        }
+        return Boolean.TRUE;
+    }
 
     @Override
     public PageResult<OrderPageVO> selectPage(OrderPageDTO orderPageDTO) {

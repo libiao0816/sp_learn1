@@ -45,9 +45,9 @@ mybatis-plus:
       # 主键策略: 数据库自增
       id-type: auto
       # 逻辑删除字段 (表里定义了则打开, 没有就注释掉)
-      # logic-delete-field: deleted
-      # logic-delete-value: 1
-      # logic-not-delete-value: 0
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
 
 # springdoc-openapi (Swagger UI) 配置
 springdoc:

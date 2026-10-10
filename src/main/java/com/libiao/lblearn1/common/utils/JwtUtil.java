@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 import java.time.Duration;
 import java.util.UUID;
 
@@ -27,16 +28,17 @@ public class JwtUtil {
 
     // 3. EXPIRE：token 的有效期，签发时以此计算过期时间（当前时间 + 1 小时）
     // 过期后 token 失效需重新登录；实际项目一般 30 分钟 ~ 2 小时
-//    private static final Duration EXPIRE = Duration.ofMillis(jwtProperties.getTtl());
+    //    private static final Duration EXPIRE = Duration.ofMillis(jwtProperties.getTtl());
 
     public static SecretKey getKey(String secret) {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public static String createToken(User user,String secret,Long ttl) {
+    public static String createToken(User user,String secret,Long ttl,List<String> userRoles) {
         return Jwts.builder().subject(user.getId().toString())
                 .id(UUID.randomUUID().toString())
                 .claim("username", user.getUsername())
+                .claim("roles", userRoles)
                 .issuedAt(new Date()) // 签发时间
                 .expiration(new Date(System.currentTimeMillis() + ttl)) // 过期时间
                 .signWith(getKey(secret))
